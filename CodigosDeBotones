@@ -1,0 +1,70 @@
+Una lista de los id de cada boton al momento de recoger su imagen
+
+En la lista de fondos (getPantallasImg)
+
+1-> Pantalla de Inicio
+2-> Pantalla de Modos de Juegos
+3-> Pantalla de Partida Competitiva
+4-> Pantalla de Partida Personalizada
+5-> Pantalla de cargar una partida
+6-> Pantalla de Seleccion de Heroe
+
+7-> Pantalla del juego(Principal)
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+En la lista de botones (getBotonesNormales, Hover o Press)
+
+1-> Boton de flecha hacia "ATRAS"
+2-> Boton de "START" Pantalla de inicio
+3-> Boton de "SALIR" de Pantalla de Inicio
+4-> Boton de partida "COMPETITIVA" en la seleccion de modo de juego
+5-> Boton de partida "PERSONALIZADA" en la seleccion de modo de juego
+6-> Boton de "CARGAR" partida en la seleccion de modo de juego
+7-> Boton de "CARGAR partida 1"
+8-> Boton de "CARGAR partida 2"
+9-> Boton de "CARGAR partida 3"
+10-> Boton seleccionar "2 JUGADORES"
+11-> Boton seleccionar "3 JUGADORES"
+12-> Boton seleccionar "4 JUGADORES"
+13-> Dados
+14-> Pause
+15-> Cerrar Menu
+16-> Terminar Partida
+17-> Guardar
+
+BotonesHeroe
+
+1-> Arquero
+2-> Banquero
+3-> Corredor
+4-> Paladin
+
+BotonesDados
+
+1-> Dado 1
+2-> Dado 2
+3-> Dado 3
+4-> Dado 4
+5-> Dado 5
+6-> Dado 6
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Fotos
+
+Estaticos
+
+1-> Fondo del tablero
+2-> Barra Lateral
+3-> Menu
+Dados(no usage)
+
+Fichas
+
+1->Ficha1
+2->Ficha2
+3->Ficha3
+4->Ficha4
+
+Casillas
+
+1->Casilla
