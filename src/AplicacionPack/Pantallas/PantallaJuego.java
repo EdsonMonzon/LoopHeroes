@@ -152,7 +152,8 @@ public class PantallaJuego extends Pantalla{
     public void manejarEventos(){
         while(!partidaTerminada){
             for (Jugador juga : juego.getListaJugadores()) {
-                turno.setText("Turno del jugador "+(juga.getNumeroJugador()+1));
+                turno.setText("Turno del jugador "+(juga.getNumeroJugador()+1)+
+                        "\nTiene "+juga.heroe.vida+" de vida");
                 if(juga.getEfectoCasilla()==5){
                     juga.limpiarEfectos();
                 }else{

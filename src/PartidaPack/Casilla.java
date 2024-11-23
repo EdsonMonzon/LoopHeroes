@@ -26,7 +26,6 @@ public class Casilla {
         this.juego = juego;
         this.pantallaJuego=juego.getPantallaJuego();
         if(efecto!=0){
-            System.out.println("No soy 0, me dibujo");
             foto= new Casillas(juego.getPantallaJuego(), 0,95,95,(columna*95)+80,(fila*95)+72,2);
         }
     }

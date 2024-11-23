@@ -38,6 +38,7 @@ public class Juego {
 
     // Lista de casillas reveladas y archivos de mapas
     ArrayList<Integer> casillasReveladas = new ArrayList<>();
+    ArrayList<Casilla> casillasConJugadores = new ArrayList<>();
     String[] mapas = new String[]{"mapa1.txt", "mapa2.txt", "mapa3.txt", "mapa4.txt", "mapa5.txt"};
 
     // Constructor para iniciar una nueva partida
@@ -78,6 +79,7 @@ public class Juego {
     private void inicializarJugadores() {
         for(int i = 0; i < numJugadores; i++) {
             listaNumerosJugadores[i] = 1;
+            listaVidaJugadores[i] = new Heroe(listaHeroesJugadores[i]).vida;
         }
     }
 
@@ -246,7 +248,7 @@ public class Juego {
                     if (listaNumerosJugadores[juga] == mapaCamino[i][j]) {
                         listaJugadores[juga] = new Jugador(this, juga, listaHeroesJugadores[juga], tablero[i][j]);
                         listaJugadores[juga].setEfectoCasilla(listaEfectosJugadores[juga]);
-                        listaJugadores[juga].setVida(listaVidaJugadores[juga]);
+                        listaJugadores[juga].heroe.vida=listaVidaJugadores[juga];
                     }
                 }
 

@@ -13,20 +13,17 @@ public class Jugador {
     public static final Random random = new Random();
 
     // Atributos del jugador
-    private Heroe heroe;
-    private int vida;
+    public Heroe heroe;
+
     private int numeroJugador;
     private int heroeID;
     private int efectoCasilla = 0;
-    private int numero;
 
     // Posición y movimiento en el mapa
     private final int ALTO_MAPA = 9;
     private final int ANCHO_MAPA = 12;
     private int lado;
     private int alto;
-    private int fila;
-    private int columna;
 
     // Referencias a otras clases y objetos de la partida
     private Juego juego;
@@ -42,28 +39,21 @@ public class Jugador {
         this.numeroJugador = numeroJugador;
         this.heroeID = heroeID;
         this.heroe = new Heroe(heroeID);
-        this.vida = heroe.getVidaHeroe();
 
         this.casillaJugador = casilla;
-        this.columna = casillaJugador.getColumna();
-        this.fila = casillaJugador.getFila();
-        this.numero = casillaJugador.getNumero();
+        juego.casillasConJugadores.add(casillaJugador);
 
         calcularPosicionEnCasilla();
         this.foto = new Fichas(juego.getPantallaJuego(), numeroJugador, 47, 50, obtenerPosX(), obtenerPosY(), 3);
     }
 
     // Métodos de acceso
-    public int getVida() { return vida; }
+    public int getVida() { return heroe.vida; }
     public int getEfectoCasilla() { return efectoCasilla; }
     public void setEfectoCasilla(int efectoCasilla) { this.efectoCasilla = efectoCasilla; }
-    public void setVida(int vida) { this.vida = vida; }
-    public int getNumero() { return numero; }
     public Foto getFoto() { return foto; }
     public int getNumeroJugador() { return numeroJugador; }
     public int getHeroeID() { return heroeID; }
-    public void setColumna(int columna) { this.columna = columna; }
-    public void setFila(int fila) { this.fila = fila; }
     public Casilla getCasilla() { return casillaJugador; }
 
     // Métodos del turno del jugador
@@ -78,6 +68,7 @@ public class Jugador {
 
             if (pantallaJuego.tirar.isBotonPress()) {
                 finTurno = ejecutarTirada();
+                atacar();
             } else if (pantallaJuego.abrirMenu.isBotonPress()) {
                 finTurno=gestionarMenu();
             }
@@ -85,6 +76,44 @@ public class Jugador {
         }
 
         actualizarEfectos();
+    }
+    private void atacar() {
+        int rango = heroe.rango; // Rango del héroe
+        int filaAtacante = casillaJugador.getFila();
+        int columnaAtacante = casillaJugador.getColumna();
+
+        for (Casilla casilla : juego.casillasConJugadores) {
+            int fila = casilla.getFila();
+            int columna = casilla.getColumna();
+
+            // Cálculo de la distancia de Manhattan
+            int distancia = Math.abs(fila - filaAtacante) + Math.abs(columna - columnaAtacante);
+
+            // Verificar si está dentro del rango y en línea recta (ataque en cruz)
+            if (distancia <= rango && (fila == filaAtacante || columna == columnaAtacante)) {
+                // La casilla está en rango, aplicamos daño a los jugadores en ella
+                for (Jugador jugador : casilla.getJugadores()) {
+                    jugador.hacerDaño(heroe.daño);
+                }
+            }
+        }
+
+        for(Jugador jugador: juego.listaJugadores){
+            if (jugador.heroe.vida <= 0) {
+                jugador.revivirJugador();
+            }
+        }
+    }
+
+    private void hacerDaño(int daño) {
+        heroe.vida -= daño;
+    }
+
+    private void revivirJugador(){
+        moverA(1);
+        heroe.reiniciarVida();
+        heroe.puntos--;
+        heroe.monedas=0;
     }
 
     private boolean ejecutarTirada() {
@@ -151,7 +180,7 @@ public class Jugador {
     }
 
     public void mover(int movimiento) {
-        int nuevoNumeroCasilla = (numero + movimiento) % juego.getTamañoCamino();
+        int nuevoNumeroCasilla = (casillaJugador.getNumero() + movimiento) % juego.getTamañoCamino();
         if (nuevoNumeroCasilla < 0) {
             nuevoNumeroCasilla += juego.getTamañoCamino(); // Ajuste para negativos
         }
@@ -165,7 +194,9 @@ public class Jugador {
             for (Casilla casilla : filaCasillas) {
                 if (casilla.getNumero() == nuevoNumeroCasilla) {
                     casillaJugador.deleteJugador(this);
+                    juego.casillasConJugadores.remove(casillaJugador);
                     casilla.addJugador(this);
+                    juego.casillasConJugadores.add(casilla);
                     casillaJugador = casilla;
                     if (efectoCasilla != 9) {
                         casillaJugador.revelar();
@@ -174,6 +205,10 @@ public class Jugador {
                 }
             }
         }
+    }
+    public void moverA(int numCasilla) {
+        actualizarCasilla(numCasilla);
+        actualizarCoordenadas();
     }
 
     // Gestión de efectos de casilla
@@ -211,10 +246,6 @@ public class Jugador {
 
     private void actualizarCoordenadas() {
         //ArrayList<Foto> fotos = pantallaJuego.getFotos();
-        this.columna = casillaJugador.getColumna();
-        this.fila = casillaJugador.getFila();
-        this.numero = casillaJugador.getNumero();
-
         foto.setX(obtenerPosX());
         foto.setY(obtenerPosY());
         pantallaJuego.getDrawable().get(foto.getCapa()).set(foto.getIndex(),foto);
@@ -222,11 +253,11 @@ public class Jugador {
     }
 
     private int obtenerPosX() {
-        return (columna * 95) + 80 + lado;
+        return (casillaJugador.getColumna() * 95) + 80 + lado;
     }
 
     private int obtenerPosY() {
-        return (fila * 95) + 72 + alto;
+        return (casillaJugador.getFila() * 95) + 72 + alto;
     }
 
     private void calcularPosicionEnCasilla() {
