@@ -23,7 +23,7 @@ public class PantallaJuego extends Pantalla{
 
     //Numero y lista de jugadores
     public int numJugadores;
-    public int [] listaHeroesJugadores;
+    public int [] listaIdHeroes;
 
     final int ALTO_MAPA =9;
     final int ANCHO_MAPA =12;
@@ -53,8 +53,8 @@ public class PantallaJuego extends Pantalla{
         super("PantallaJuego");
         this.ventana = ventana;
         //Recibimos la lista de los jugadores
-        this.listaHeroesJugadores = listaHeroesJugadores;
-        this.numJugadores = this.listaHeroesJugadores.length;
+        this.listaIdHeroes = listaHeroesJugadores;
+        this.numJugadores = this.listaIdHeroes.length;
 
 
         //Cargamos las imagenes y botones de la pantalla

@@ -14,7 +14,7 @@ public class Jugador {
 
     // Atributos del jugador
     public Heroe heroe;
-
+    public EstadoJugador estado;
     private int numeroJugador;
     private int heroeID;
     private int efectoCasilla = 0;
@@ -32,13 +32,12 @@ public class Jugador {
     private Foto foto;
 
     // Constructor
-    public Jugador(Juego juego, int numeroJugador, int heroeID, Casilla casilla) {
+    public Jugador(Juego juego, int numeroJugador, Heroe heroe, Casilla casilla) {
         this.juego = juego;
         this.pantallaJuego = juego.getPantallaJuego();
 
         this.numeroJugador = numeroJugador;
-        this.heroeID = heroeID;
-        this.heroe = new Heroe(heroeID);
+        this.heroe = heroe;
 
         this.casillaJugador = casilla;
         juego.casillasConJugadores.add(casillaJugador);
@@ -49,6 +48,10 @@ public class Jugador {
 
     // Métodos de acceso
     public int getVida() { return heroe.vida; }
+    public int getRango() { return heroe.rango; }
+    public int getDaño() { return heroe.daño; }
+    public int getMonedas() { return heroe.monedas; }
+    public int getPuntos() { return heroe.puntos; }
     public int getEfectoCasilla() { return efectoCasilla; }
     public void setEfectoCasilla(int efectoCasilla) { this.efectoCasilla = efectoCasilla; }
     public Foto getFoto() { return foto; }

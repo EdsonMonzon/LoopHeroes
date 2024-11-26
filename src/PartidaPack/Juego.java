@@ -26,10 +26,11 @@ public class Juego {
     // Atributos del tablero y jugadores
     public Casilla[][] tablero;
     public Jugador[] listaJugadores;
-    public int[] listaHeroesJugadores;
+
+    public Heroe[] listaHeroeJugadores;
+    public int[] listaIdHeroes;
     public int[] listaNumerosJugadores;
     public int[] listaEfectosJugadores;
-    public int[] listaVidaJugadores;
     private int numJugadores;
 
     // Matrices para definir el camino y valores del mapa
@@ -45,7 +46,7 @@ public class Juego {
     public Juego(PantallaJuego pantallaJuego) {
         this.pantallaJuego = pantallaJuego;
         this.numJugadores = pantallaJuego.numJugadores;
-        this.listaHeroesJugadores = pantallaJuego.listaHeroesJugadores;
+        this.listaIdHeroes = pantallaJuego.listaIdHeroes;
 
         inicializarJuego();  // Inicializa los atributos del juego
         inicializarJugadores();  // Configura a los jugadores con valores iniciales
@@ -59,7 +60,7 @@ public class Juego {
 
         leerNumeroJugadores(archivoLeer);  // Lee el número de jugadores del archivo
         pantallaJuego.numJugadores = numJugadores;
-        this.listaHeroesJugadores = new int[numJugadores];
+        this.listaIdHeroes = new int[numJugadores];
 
         inicializarJuego();  // Inicializa los atributos del juego
         leerPartidaGuardada(archivoLeer);  // Carga datos de una partida guardada
@@ -69,17 +70,22 @@ public class Juego {
     // Inicializa los atributos de jugadores y tablero
     private void inicializarJuego() {
         listaJugadores = new Jugador[numJugadores];
+        tablero = new Casilla[ALTO_MAPA][ANCHO_MAPA];
+
+
         listaNumerosJugadores = new int[numJugadores];
         listaEfectosJugadores = new int[numJugadores];
-        listaVidaJugadores = new int[numJugadores];
-        tablero = new Casilla[ALTO_MAPA][ANCHO_MAPA];
+        listaHeroeJugadores=new Heroe[numJugadores];
+        //listaVidaJugadores = new int[numJugadores];
+
     }
 
     // Configura los jugadores con posición inicial en 1
     private void inicializarJugadores() {
         for(int i = 0; i < numJugadores; i++) {
             listaNumerosJugadores[i] = 1;
-            listaVidaJugadores[i] = new Heroe(listaHeroesJugadores[i]).vida;
+            listaEfectosJugadores[i] = 0;
+            listaHeroeJugadores[i] = new Heroe(listaIdHeroes[i]);
         }
     }
 
@@ -110,6 +116,10 @@ public class Juego {
                 writer.write(juga.getHeroeID() + " ");
                 writer.write(juga.getEfectoCasilla() + " ");
                 writer.write(juga.getVida() + " ");
+                writer.write(juga.getRango() + " ");
+                writer.write(juga.getDaño() + " ");
+                writer.write(juga.getMonedas() + " ");
+                writer.write(juga.getPuntos() + " ");
                 writer.write("\n");
             }
 
@@ -173,9 +183,16 @@ public class Juego {
         for (int i = 0; i < numJugadores; i++) {
             try (Scanner lineaScanner = new Scanner(sc.nextLine())) {
                 listaNumerosJugadores[i] = lineaScanner.nextInt();
-                listaHeroesJugadores[i] = lineaScanner.nextInt();
+                listaIdHeroes[i] = lineaScanner.nextInt();
                 listaEfectosJugadores[i] = lineaScanner.nextInt();
-                listaVidaJugadores[i] = lineaScanner.nextInt();
+
+                listaHeroeJugadores[i]=new Heroe(listaIdHeroes[i]);
+
+                listaHeroeJugadores[i].vida = lineaScanner.nextInt();
+                listaHeroeJugadores[i].rango = lineaScanner.nextInt();
+                listaHeroeJugadores[i].daño = lineaScanner.nextInt();
+                listaHeroeJugadores[i].monedas = lineaScanner.nextInt();
+                listaHeroeJugadores[i].puntos = lineaScanner.nextInt();
             } catch (NoSuchElementException e) {
                 System.out.println("Error al leer la posición de los jugadores.");
             }
@@ -246,9 +263,8 @@ public class Juego {
                 // Coloca a cada jugador en su casilla inicial
                 for (int juga = 0; juga < numJugadores; juga++) {
                     if (listaNumerosJugadores[juga] == mapaCamino[i][j]) {
-                        listaJugadores[juga] = new Jugador(this, juga, listaHeroesJugadores[juga], tablero[i][j]);
+                        listaJugadores[juga] = new Jugador(this, juga, listaHeroeJugadores[juga], tablero[i][j]);
                         listaJugadores[juga].setEfectoCasilla(listaEfectosJugadores[juga]);
-                        listaJugadores[juga].heroe.vida=listaVidaJugadores[juga];
                     }
                 }
 
