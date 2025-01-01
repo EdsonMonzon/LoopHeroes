@@ -127,6 +127,10 @@ public class Sprite {
             "Imagenes/imgBotones/imgBotonesPress/BotonDado4_Press.jpg",
             "Imagenes/imgBotones/imgBotonesPress/BotonDado5_Press.jpg",
             "Imagenes/imgBotones/imgBotonesPress/BotonDado6_Press.jpg",
+            "Imagenes/imgBotones/imgBotonesPress/BotonDadoAtacar_Press.png",
+            "Imagenes/imgBotones/imgBotonesPress/BotonDadoCurar_Press.png",
+            "Imagenes/imgBotones/imgBotonesPress/BotonDadoMoneda_Press.png",
+
     };
     static String[] botonesDadoNormal=new String[]{
             "Imagenes/imgBotones/imgBotonesNormales/BotonDado1_Normal.jpg",
@@ -135,6 +139,10 @@ public class Sprite {
             "Imagenes/imgBotones/imgBotonesNormales/BotonDado4_Normal.jpg",
             "Imagenes/imgBotones/imgBotonesNormales/BotonDado5_Normal.jpg",
             "Imagenes/imgBotones/imgBotonesNormales/BotonDado6_Normal.jpg",
+            "Imagenes/imgBotones/imgBotonesNormales/BotonDadoAtacar_Normal.png",
+            "Imagenes/imgBotones/imgBotonesNormales/BotonDadoCurar_Normal.png",
+            "Imagenes/imgBotones/imgBotonesNormales/BotonDadoMoneda_Normal.png",
+
     };static String[] botonesDadoHover=new String[]{
             "Imagenes/imgBotones/imgBotonesHover/BotonDado1_Hover.jpg",
             "Imagenes/imgBotones/imgBotonesHover/BotonDado2_Hover.jpg",
@@ -142,6 +150,9 @@ public class Sprite {
             "Imagenes/imgBotones/imgBotonesHover/BotonDado4_Hover.jpg",
             "Imagenes/imgBotones/imgBotonesHover/BotonDado5_Hover.jpg",
             "Imagenes/imgBotones/imgBotonesHover/BotonDado6_Hover.jpg",
+            "Imagenes/imgBotones/imgBotonesHover/BotonDadoAtacar_Hover.png",
+            "Imagenes/imgBotones/imgBotonesHover/BotonDadoCurar_Hover.png",
+            "Imagenes/imgBotones/imgBotonesHover/BotonDadoMoneda_Hover.png",
 
     };
 

@@ -62,4 +62,11 @@ public class Heroe {
             }
         }
     }
+    public void curar(int i){
+        vida+=i;
+    }
+
+    public void ganarMonedas(int i){
+        monedas+=i;
+    }
 }

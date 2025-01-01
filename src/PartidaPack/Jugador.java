@@ -14,7 +14,7 @@ public class Jugador {
 
     // Atributos del jugador
     public Heroe heroe;
-    public EstadoJugador estado;
+
     private int numeroJugador;
     private int heroeID;
     private int efectoCasilla = 0;
@@ -31,6 +31,9 @@ public class Jugador {
     private Casilla casillaJugador;
     private Foto foto;
 
+    boolean dadosTirados = false;
+    boolean accionUsada = false;
+
     // Constructor
     public Jugador(Juego juego, int numeroJugador, Heroe heroe, Casilla casilla) {
         this.juego = juego;
@@ -39,11 +42,18 @@ public class Jugador {
         this.numeroJugador = numeroJugador;
         this.heroe = heroe;
 
+        if (casilla == null) {
+            throw new IllegalArgumentException("La casilla proporcionada es null.");
+        }
+        System.out.println("Casilla jugador: " + casillaJugador);
+
+
         this.casillaJugador = casilla;
         juego.casillasConJugadores.add(casillaJugador);
 
         calcularPosicionEnCasilla();
         this.foto = new Fichas(juego.getPantallaJuego(), numeroJugador, 47, 50, obtenerPosX(), obtenerPosY(), 3);
+
     }
 
     // Métodos de acceso
@@ -71,14 +81,11 @@ public class Jugador {
 
             if (pantallaJuego.tirar.isBotonPress()) {
                 finTurno = ejecutarTirada();
-                atacar();
             } else if (pantallaJuego.abrirMenu.isBotonPress()) {
                 finTurno=gestionarMenu();
             }
             descansar(10);
         }
-
-        actualizarEfectos();
     }
     private void atacar() {
         int rango = heroe.rango; // Rango del héroe
@@ -108,6 +115,14 @@ public class Jugador {
         }
     }
 
+    private void curar(){
+        heroe.curar(3);
+    }
+
+    private void moneda(){
+        heroe.ganarMonedas(1);
+    }
+
     private void hacerDaño(int daño) {
         heroe.vida -= daño;
     }
@@ -123,29 +138,45 @@ public class Jugador {
         pantallaJuego.instruccion.setText("Elije uno de los dados");
         descansar(50);
 
-        int dado1 = lanzarDados();
-        int dado2 = (efectoCasilla != 6) ? lanzarDados() : 0;
+        int dado1 = lanzarDados(1,7);
+        int dado2 = (efectoCasilla != 6) ? lanzarDados(1,7) : 0;
+        int dadoAccion=lanzarDados(7,10);
 
-        pantallaJuego.dado1B.setId(dado1);
-        pantallaJuego.dado1B.unblock();
+        pantallaJuego.dado1.setId(dado1);
+        pantallaJuego.dado1.unblock();
         if (efectoCasilla != 6) {
-            pantallaJuego.dado2B.setId(dado2);
-            pantallaJuego.dado2B.unblock();
+            pantallaJuego.dado2.setId(dado2);
+            pantallaJuego.dado2.unblock();
         }
+        pantallaJuego.dadoAccion.setId(dadoAccion);
+        pantallaJuego.dadoAccion.unblock();
 
-        return seleccionarDado(dado1, dado2);
+        return seleccionarDado(dado1, dado2,dadoAccion);
     }
 
-    private boolean seleccionarDado(int dado1, int dado2) {
-        boolean dadosTirados = false;
+    private boolean seleccionarDado(int dado1, int dado2, int dadoAccion) {
+        dadosTirados = false;
+        accionUsada = false;
 
-        while (!dadosTirados) {
-            if (pantallaJuego.dado1B.isBotonPress()) {
+        while (!dadosTirados || !accionUsada) {
+            if (pantallaJuego.dado1.isBotonPress()) {
                 procesarMovimiento(dado1);
                 dadosTirados = true;
-            } else if (pantallaJuego.dado2B.isBotonPress()) {
+
+                pantallaJuego.dado1.block();
+                pantallaJuego.dado2.block();
+
+            } else if (pantallaJuego.dado2.isBotonPress()) {
                 procesarMovimiento(dado2);
                 dadosTirados = true;
+
+                pantallaJuego.dado1.block();
+                pantallaJuego.dado2.block();
+            } else if(pantallaJuego.dadoAccion.isBotonPress()){
+                procesarAccion(dadoAccion);
+                accionUsada = true;
+
+                pantallaJuego.dadoAccion.block();
             }
             descansar(10);
         }
@@ -172,6 +203,20 @@ public class Jugador {
         return false;
     }
 
+    public void procesarAccion(int accion) {
+        switch(accion){
+            case 7->{
+                atacar();
+            }
+            case 8->{
+                curar();
+            }
+            case 9->{
+                moneda();
+            }
+        }
+    }
+
     // Movimiento y actualización de posición
     public void procesarMovimiento(int movimiento) {
         int movimientoFinal = switch (efectoCasilla) {
@@ -190,6 +235,9 @@ public class Jugador {
 
         actualizarCasilla(nuevoNumeroCasilla);
         actualizarCoordenadas();
+        actualizarEfectos();
+
+        System.out.println("Casilla jugador: " + casillaJugador);
     }
 
     private void actualizarCasilla(int nuevoNumeroCasilla) {
@@ -228,7 +276,7 @@ public class Jugador {
         switch (casillaJugador.getEfecto()) {
             case 2 -> mover(-1); // Retroceso
             case 3 -> mover(1); // Avance
-            case 4 -> { limpiarEfectos(); turnoJugador(); } // Vuelve a tirar
+            case 4 -> { limpiarEfectos(); nuevoTurnoJugador(); } // Vuelve a tirar
             case 5 -> efectoCasilla = 5; // Pierde un turno
             case 6 -> efectoCasilla = 6; // Solo un dado
             case 7 -> efectoCasilla = 7; // Multiplica dado
@@ -237,13 +285,20 @@ public class Jugador {
         }
     }
 
+    public void nuevoTurnoJugador(){
+        dadosTirados=true;
+        accionUsada=true;
+
+        turnoJugador();
+    }
+
     public void limpiarEfectos() {
         efectoCasilla = 0;
     }
 
     // Métodos auxiliares
-    private int lanzarDados() {
-        int valor = random.nextInt(1, 7);
+    private int lanzarDados(int origin , int bound) {
+        int valor = random.nextInt(origin, bound);
         return valor;
     }
 
@@ -284,7 +339,8 @@ public class Jugador {
 
     private void bloquearBotones() {
         pantallaJuego.tirar.unblock();
-        pantallaJuego.dado1B.block();
-        pantallaJuego.dado2B.block();
+        pantallaJuego.dado1.block();
+        pantallaJuego.dado2.block();
+        pantallaJuego.dadoAccion.block();
     }
 }

@@ -34,8 +34,9 @@ public class PantallaJuego extends Pantalla{
     public Boton cerrarMenu;
     public Boton guardar;
     public Boton terminarPartida;
-    public Boton dado1B=new BotonDados(this,1,150, 150, 1300, 700,1);
-    public Boton dado2B=new BotonDados(this,1,150, 150, 1500, 700,1);;
+    public Boton dadoAccion=new BotonDados(this,7,150,150,1400,520,1);
+    public Boton dado1=new BotonDados(this,1,150, 150, 1300, 700,1);
+    public Boton dado2 =new BotonDados(this,1,150, 150, 1500, 700,1);;
 
     Foto fondoTablero;
     Foto barraLateral;
@@ -103,24 +104,24 @@ public class PantallaJuego extends Pantalla{
     }
 
     public void configLabels(){
-        turno=new Labels(this,"Turno del jugador 1",1400,250,200,30,1);
-        instruccion=new Labels(this,"Presiona \"Tirar\" para tirar los dados" ,1400,350,200,30,1);
-        informacion=new Labels(this,"Estas en la casilla inicial" ,1400,550,200,30,1);
+        turno=new Labels(this,"Turno del jugador 1",1400,50,200,30,1);
+        instruccion=new Labels(this,"Presiona \"Tirar\" para tirar los dados" ,1400,150,200,30,1);
+        informacion=new Labels(this,"Estas en la casilla inicial" ,1400,250,200,30,1);
     }
 
     public void configBotones(){
         //this.botonAtras = crearBoton(this, 1, 150, 150, 75, 75,"Boton");
         this.tirar = new Boton(this, 13, 150, 38, 1400, 850,1);
         this.abrirMenu = new Boton(this, 14, 40, 40, 1550, 50,1);
-        this.cerrarMenu=new Boton(this,15,20,20,1220,40,3);
-        this.terminarPartida=new Boton(this,16,100,50,1380,110,3);
-        this.guardar=new Boton(this,17,100,50,1380,160,3);
+        this.cerrarMenu=new Boton(this,15,20,20,635,360,5);
+        this.terminarPartida=new Boton(this,16,100,50,800,500,5);
+        this.guardar=new Boton(this,17,100,50,800,420,5);
     }
 
     public void configFotos(){
         this.fondoTablero = new Estaticos(this, 1, 1200, 900, 600, 450,0);
         this.barraLateral = new Estaticos(this, 2, 400, 900, 1400, 450,0);
-        this.menu= new Estaticos(this,3, 350,200,1380,110,2);
+        this.menu= new Estaticos(this,3, 350,200,800,450,4);
     }
 
     /**
