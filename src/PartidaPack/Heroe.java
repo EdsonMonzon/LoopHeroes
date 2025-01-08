@@ -69,4 +69,54 @@ public class Heroe {
     public void ganarMonedas(int i){
         monedas+=i;
     }
+    public void ganarPuntos(int i){
+        puntos+=i;
+    }
+    public void setMonedas(int i){
+        monedas=i;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getVida() {
+        return vida;
+    }
+
+    public void setVida(int vida) {
+        this.vida = vida;
+    }
+
+    public int getRango() {
+        return rango;
+    }
+
+    public void setRango(int rango) {
+        this.rango = rango;
+    }
+
+    public int getDaño() {
+        return daño;
+    }
+
+    public void setDaño(int daño) {
+        this.daño = daño;
+    }
+
+    public int getPuntos() {
+        return puntos;
+    }
+
+    public void setPuntos(int puntos) {
+        this.puntos = puntos;
+    }
+
+    public int getMonedas() {
+        return monedas;
+    }
 }

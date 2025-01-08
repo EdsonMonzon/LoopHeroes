@@ -29,11 +29,18 @@ public class Sprite {
             "Imagenes/imgSprites/Casilla7Doble.jpg",
             "Imagenes/imgSprites/Casilla8RetrocedeTodo.jpg",
             "Imagenes/imgSprites/Casilla9NoReveal.jpg",
+            "Imagenes/imgSprites/Casilla10Cura.png",
+            "Imagenes/imgSprites/Casilla11Tormenta.png",
+            "Imagenes/imgSprites/Casilla12Atacar.png",
+            "Imagenes/imgSprites/Casilla13Moneda.png",
+            "Imagenes/imgSprites/Casilla14Proteccion.png",
+            "Imagenes/imgSprites/Casilla15Grieta.png",
     };
     static String[] Estaticos = new String[]{
             "Imagenes/imgSprites/FondoTablero.jpg",
             "Imagenes/imgSprites/BarraLateral.jpg",
             "Imagenes/imgSprites/FondoMenu.jpg",
+            "Imagenes/imgSprites/MenuStats.png",
             "Imagenes/imgBotones/imgBotonesNormales/BotonDado1_Normal.jpg",
             "Imagenes/imgBotones/imgBotonesNormales/BotonDado2_Normal.jpg",
             "Imagenes/imgBotones/imgBotonesNormales/BotonDado3_Normal.jpg",
@@ -59,8 +66,7 @@ public class Sprite {
                     "Imagenes/imgBotones/imgBotonesNormales/BotonCerrar_Normal.jpg",
                     "Imagenes/imgBotones/imgBotonesNormales/BotonTerminarPartida_Normal.jpg",
                     "Imagenes/imgBotones/imgBotonesNormales/BotonGuardar_Normal.jpg",
-
-
+                    "Imagenes/imgBotones/imgBotonesNormales/BotonSaltarTurno_Normal.png",
             };
     static String[] botonesHover = new String[]
             {"Imagenes/imgBotones/imgBotonesHover/BotonAtras_Hover.jpg",
@@ -80,7 +86,7 @@ public class Sprite {
                     "Imagenes/imgBotones/imgBotonesHover/BotonCerrar_Hover.jpg",
                     "Imagenes/imgBotones/imgBotonesHover/BotonTerminarPartida_Hover.jpg",
                     "Imagenes/imgBotones/imgBotonesHover/BotonGuardar_Hover.jpg",
-
+                    "Imagenes/imgBotones/imgBotonesHover/BotonSaltarTurno_Hover.png",
             };
     static String[] botonesPress = new String[]
             {"Imagenes/imgBotones/imgBotonesPress/BotonAtras_Press.jpg",
@@ -100,7 +106,7 @@ public class Sprite {
                     "Imagenes/imgBotones/imgBotonesPress/BotonCerrar_Press.jpg",
                     "Imagenes/imgBotones/imgBotonesPress/BotonTerminarPartida_Press.jpg",
                     "Imagenes/imgBotones/imgBotonesPress/BotonGuardar_Press.jpg",
-
+                    "Imagenes/imgBotones/imgBotonesPress/BotonSaltarTurno_Press.png",
             };
     static String[] botonesHeroeNormales=new String[]{
             "Imagenes/imgHeroes/imgHeroesNormales/HeroeArquero_Normal.jpg",

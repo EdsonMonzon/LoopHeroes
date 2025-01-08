@@ -19,6 +19,9 @@ public class Jugador {
     private int heroeID;
     private int efectoCasilla = 0;
 
+    boolean pasoMitad=false;
+    boolean pasoMeta=false;
+
     // Posición y movimiento en el mapa
     private final int ALTO_MAPA = 9;
     private final int ANCHO_MAPA = 12;
@@ -33,6 +36,8 @@ public class Jugador {
 
     boolean dadosTirados = false;
     boolean accionUsada = false;
+
+    int puntosVictoria=0;
 
     // Constructor
     public Jugador(Juego juego, int numeroJugador, Heroe heroe, Casilla casilla) {
@@ -71,7 +76,11 @@ public class Jugador {
 
     // Métodos del turno del jugador
     public void turnoJugador() {
+
+        imprimirStats();
+
         boolean finTurno = false;
+        boolean saltoTurno = false;
 
         bloquearBotones();
         imprimeInformacion();
@@ -86,9 +95,18 @@ public class Jugador {
             }
             descansar(10);
         }
+
+        pantallaJuego.saltarTurno.unblock();
+        while(!saltoTurno){
+            if(pantallaJuego.saltarTurno.isBotonPress()){
+                saltoTurno = true;
+            }
+            descansar(10);
+        }
     }
+
     private void atacar() {
-        int rango = heroe.rango; // Rango del héroe
+        int rango = heroe.getRango(); // Rango del héroe
         int filaAtacante = casillaJugador.getFila();
         int columnaAtacante = casillaJugador.getColumna();
 
@@ -96,31 +114,58 @@ public class Jugador {
             int fila = casilla.getFila();
             int columna = casilla.getColumna();
 
-            // Cálculo de la distancia de Manhattan
-            int distancia = Math.abs(fila - filaAtacante) + Math.abs(columna - columnaAtacante);
-
-            // Verificar si está dentro del rango y en línea recta (ataque en cruz)
-            if (distancia <= rango && (fila == filaAtacante || columna == columnaAtacante)) {
-                // La casilla está en rango, aplicamos daño a los jugadores en ella
-                for (Jugador jugador : casilla.getJugadores()) {
-                    jugador.hacerDaño(heroe.daño);
+            // Verificar si la casilla está en la misma fila o columna que el atacante
+            if (fila == filaAtacante || columna == columnaAtacante) {
+                // Verificar si la casilla está dentro del rango
+                if (Math.abs(fila - filaAtacante) <= rango || Math.abs(columna - columnaAtacante) <= rango) {
+                    for (Jugador jugador : casilla.getJugadores()) {
+                        if (jugador.efectoCasilla != 14 && jugador.numeroJugador!=this.numeroJugador) {
+                            jugador.hacerDaño(heroe.getDaño()); // Aplicar daño al jugador
+                            pantallaJuego.informacion.setText("Haz hecho "+heroe.getDaño()+" al jugador "+(jugador.numeroJugador+1)+" le queda "+jugador.getVida()+" vida");
+                        }
+                    }
                 }
             }
         }
 
+    /**
+    // Cálculo de la distancia de Manhattan
+    int distancia = Math.abs(fila - filaAtacante) + Math.abs(columna - columnaAtacante);
+
+    // Verificar si está dentro del rango y en línea recta (ataque en cruz)
+    if (distancia <= rango && (fila == filaAtacante || columna == columnaAtacante)) {
+        // La casilla está en rango, aplicamos daño a los jugadores en ella
+        for (Jugador jugador : casilla.getJugadores()) {
+            if(jugador.efectoCasilla!=14){
+                jugador.hacerDaño(heroe.daño);
+            }
+        }
+    }*/
+
         for(Jugador jugador: juego.listaJugadores){
-            if (jugador.heroe.vida <= 0) {
+            if (jugador.heroe.getVida() <= 0) {
                 jugador.revivirJugador();
+                this.moneda(1);
+                this.heroe.ganarPuntos(1);
             }
         }
     }
 
-    private void curar(){
-        heroe.curar(3);
+    private void imprimirStats(){
+        pantallaJuego.vida.setText(String.valueOf(getVida()));
+        pantallaJuego.daño.setText(String.valueOf(getDaño()));
+        pantallaJuego.monedas.setText(String.valueOf(getMonedas()));
+        pantallaJuego.rango.setText(String.valueOf(getRango()));
     }
 
-    private void moneda(){
-        heroe.ganarMonedas(1);
+    private void curar(int i){
+        heroe.curar(i);
+        imprimirStats();
+    }
+
+    private void moneda(int i){
+        heroe.ganarMonedas(i);
+        imprimirStats();
     }
 
     private void hacerDaño(int daño) {
@@ -131,7 +176,7 @@ public class Jugador {
         moverA(1);
         heroe.reiniciarVida();
         heroe.puntos--;
-        heroe.monedas=0;
+        heroe.setMonedas(0);
     }
 
     private boolean ejecutarTirada() {
@@ -209,10 +254,10 @@ public class Jugador {
                 atacar();
             }
             case 8->{
-                curar();
+                curar(3);
             }
             case 9->{
-                moneda();
+                moneda(1);
             }
         }
     }
@@ -229,6 +274,14 @@ public class Jugador {
 
     public void mover(int movimiento) {
         int nuevoNumeroCasilla = (casillaJugador.getNumero() + movimiento) % juego.getTamañoCamino();
+
+        if(casillaJugador.getNumero()< juego.getTamañoCamino()/2 && nuevoNumeroCasilla>= juego.getTamañoCamino()/2){
+            pasoMitad=true;
+        }
+        if(casillaJugador.getNumero()>juego.getTamañoCamino()/2 && nuevoNumeroCasilla<juego.getTamañoCamino()/2){
+            pasoMeta=true;
+        }
+
         if (nuevoNumeroCasilla < 0) {
             nuevoNumeroCasilla += juego.getTamañoCamino(); // Ajuste para negativos
         }
@@ -238,6 +291,25 @@ public class Jugador {
         actualizarEfectos();
 
         System.out.println("Casilla jugador: " + casillaJugador);
+
+        if(pasoMitad && pasoMeta){
+            unaVuelta();
+        }
+    }
+
+    private void unaVuelta(){
+        if(heroe.getPuntos()>=3){
+            ganarPartida();
+        }
+        heroe.ganarPuntos(getMonedas()/5);
+        heroe.setMonedas(getMonedas()%5);
+        curar(3);
+        moneda(1);
+    }
+
+    private void ganarPartida(){
+        imprimirGanaste();
+        pantallaJuego.partidaTerminada=true;
     }
 
     private void actualizarCasilla(int nuevoNumeroCasilla) {
@@ -282,6 +354,25 @@ public class Jugador {
             case 7 -> efectoCasilla = 7; // Multiplica dado
             case 8 -> efectoCasilla = 8; // Tiro inverso
             case 9 -> efectoCasilla = 9; // No revela casilla
+            case 10 -> curar(3);
+            case 11 -> tormenta();
+            case 12 -> atacar();
+            case 13 -> moneda(1);
+            case 14 -> efectoCasilla = 14;
+            case 15 -> {
+                hacerDaño(1);
+                pantallaJuego.vida.setText(String.valueOf(getVida()));
+            }
+        }
+    }
+
+    public void tormenta() {
+        for(Jugador j:juego.listaJugadores){
+            if(j.numeroJugador!=this.numeroJugador){
+                if(j.efectoCasilla!=14){
+                    j.hacerDaño(1);
+                }
+            }
         }
     }
 
@@ -342,5 +433,6 @@ public class Jugador {
         pantallaJuego.dado1.block();
         pantallaJuego.dado2.block();
         pantallaJuego.dadoAccion.block();
+        pantallaJuego.saltarTurno.block();
     }
 }

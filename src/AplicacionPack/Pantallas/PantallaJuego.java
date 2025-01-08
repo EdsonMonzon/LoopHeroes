@@ -34,17 +34,24 @@ public class PantallaJuego extends Pantalla{
     public Boton cerrarMenu;
     public Boton guardar;
     public Boton terminarPartida;
-    public Boton dadoAccion=new BotonDados(this,7,150,150,1400,520,1);
+    public Boton saltarTurno;
+
+    public Boton dadoAccion=new BotonDados(this,7,150,150,1500,520,1);
     public Boton dado1=new BotonDados(this,1,150, 150, 1300, 700,1);
     public Boton dado2 =new BotonDados(this,1,150, 150, 1500, 700,1);;
 
     Foto fondoTablero;
     Foto barraLateral;
+    Foto menuStats;
     public Foto menu;
 
     public Labels turno;
     public Labels instruccion;
     public Labels informacion;
+    public Labels vida;
+    public Labels daño;
+    public Labels monedas;
+    public Labels rango;
 
     public Boton getTirar() {
         return tirar;
@@ -107,6 +114,10 @@ public class PantallaJuego extends Pantalla{
         turno=new Labels(this,"Turno del jugador 1",1400,50,200,30,1);
         instruccion=new Labels(this,"Presiona \"Tirar\" para tirar los dados" ,1400,150,200,30,1);
         informacion=new Labels(this,"Estas en la casilla inicial" ,1400,250,200,30,1);
+        vida=new Labels(this,"0",1295,460,10,10,2);
+        daño=new Labels(this,"0",1295,500,10,10,2);
+        monedas=new Labels(this,"0",1295,540,10,10,2);
+        rango=new Labels(this,"0",1295,580,10,10,2);
     }
 
     public void configBotones(){
@@ -116,12 +127,14 @@ public class PantallaJuego extends Pantalla{
         this.cerrarMenu=new Boton(this,15,20,20,635,360,5);
         this.terminarPartida=new Boton(this,16,100,50,800,500,5);
         this.guardar=new Boton(this,17,100,50,800,420,5);
+        this.saltarTurno=new Boton(this,18,38,38,1570,850,1);
     }
 
     public void configFotos(){
         this.fondoTablero = new Estaticos(this, 1, 1200, 900, 600, 450,0);
         this.barraLateral = new Estaticos(this, 2, 400, 900, 1400, 450,0);
         this.menu= new Estaticos(this,3, 350,200,800,450,4);
+        this.menuStats= new Estaticos(this,4,50,150,1252,520,1);
     }
 
     /**
@@ -153,13 +166,11 @@ public class PantallaJuego extends Pantalla{
     public void manejarEventos(){
         while(!partidaTerminada){
             for (Jugador juga : juego.getListaJugadores()) {
-                turno.setText("Turno del jugador "+(juga.getNumeroJugador()+1)+
-                        "\nTiene "+juga.heroe.vida+" de vida");
+                turno.setText("Turno del jugador "+(juga.getNumeroJugador()+1));
                 if(juga.getEfectoCasilla()==5){
                     juga.limpiarEfectos();
                 }else{
                     juga.turnoJugador();
-                    System.out.println("paso de turno");
                 }
                 if(partidaTerminada){
                     break;

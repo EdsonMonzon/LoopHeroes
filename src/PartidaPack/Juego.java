@@ -240,10 +240,11 @@ public class Juego {
                 } else if (mapaCamino[i][j] == 1) {
                     mapaValores[i][j] = 1;
                 } else {
-                    mapaValores[i][j] = random.nextInt(1, 10);
+                    mapaValores[i][j] = random.nextInt(1, 16);
                 }
             }
         }
+        verificarError();
     }
 
     // Construye el tablero visual y configura las posiciones iniciales de los jugadores
@@ -272,6 +273,25 @@ public class Juego {
                 if (casillasReveladas.contains(tablero[i][j].getNumero())) {
                     tablero[i][j].revelar();
                 }
+            }
+        }
+    }
+
+    private void verificarError(){
+        int siguienteNumero=0;
+        int ultimoValor=0;
+        int actualValor=0;
+
+        for (int i = 0; i < ALTO_MAPA; i++) {
+            for (int j = 0; j < ANCHO_MAPA; j++) {
+                if (mapaCamino[i][j] == siguienteNumero) {
+                    actualValor = mapaValores[i][j];
+                    if (actualValor==2 && ultimoValor==3) {
+                        mapaValores[i][j] = 1;
+                    }
+                    ultimoValor=mapaValores[i][j];
+                }
+                siguienteNumero++;
             }
         }
     }
